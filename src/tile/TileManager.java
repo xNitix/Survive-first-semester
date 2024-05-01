@@ -18,7 +18,7 @@ public class TileManager {
     public TileManager(GamePanel gp){
         this.gp = gp;
         tile = new Tile[10];
-        mapTileNum = new int[gp.MAX_SCREEN_COLUM][gp.MAX_SCREEN_ROW];
+        mapTileNum = new int[gp.MAX_WORLD_COL][gp.MAX_WORLD_ROW];
         getTailImage();
         loadMap("/maps/map1.txt");
     }
@@ -58,16 +58,16 @@ public class TileManager {
             int col = 0;
             int row = 0;
 
-            while(col < gp.MAX_SCREEN_COLUM && row < gp.MAX_SCREEN_ROW){
+            while(col < gp.MAX_WORLD_COL && row < gp.MAX_WORLD_ROW){
                 String line = br.readLine();
 
-                while(col < gp.MAX_SCREEN_COLUM) {
+                while(col < gp.MAX_WORLD_COL) {
                     String numbers[] = line.split(" ");
                     int num = Integer.parseInt(numbers[col]);
                     mapTileNum[col][row] = num;
                     col++;
                 }
-                if(col == gp.MAX_SCREEN_COLUM){
+                if(col == gp.MAX_WORLD_COL){
                     col = 0;
                     row++;
                 }
@@ -78,20 +78,27 @@ public class TileManager {
     }
 
     public void draw(Graphics2D g2){
-        int col = 0, row = 0, x = 0, y = 0;
+        int worldCol = 0, worldRow = 0;
 
-        while(col < gp.MAX_SCREEN_COLUM && row < gp.MAX_SCREEN_ROW){
-            int tileNum = mapTileNum[col][row];
+        while(worldCol < gp.MAX_WORLD_COL && worldRow < gp.MAX_WORLD_ROW){
+            int tileNum = mapTileNum[worldCol][worldRow];
 
-            g2.drawImage(tile[tileNum].image, x, y, gp.TILE_SIZE, gp.TILE_SIZE, null);
-            col++;
-            x += gp.TILE_SIZE;
+            int worldX = worldCol * gp.TILE_SIZE;
+            int worldY = worldRow * gp.TILE_SIZE;
+            int screenX = worldX - gp.player.getPosition().getX() + gp.player.getCameraPosition().getX();
+            int screenY = worldY - gp.player.getPosition().getY() + gp.player.getCameraPosition().getY();
 
-            if(col == gp.MAX_SCREEN_COLUM){
-                col = 0;
-                x = 0;
-                row++;
-                y += gp.TILE_SIZE;
+            if(worldX + gp.TILE_SIZE > gp.player.getPosition().getX() - gp.player.getCameraPosition().getX() &&
+                    (worldX - gp.TILE_SIZE < gp.player.getPosition().getX() + gp.player.getCameraPosition().getX()) &&
+                    (worldY + gp.TILE_SIZE > gp.player.getPosition().getY() - gp.player.getCameraPosition().getY()) &&
+                    (worldY - gp.TILE_SIZE < gp.player.getPosition().getY() + gp.player.getCameraPosition().getY())) {
+                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+            }
+            worldCol++;
+
+            if(worldCol == gp.MAX_WORLD_COL){
+                worldCol = 0;
+                worldRow++;
             }
 
         }

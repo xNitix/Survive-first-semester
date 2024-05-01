@@ -14,16 +14,20 @@ public class Player extends Entity{
     GamePanel gp;
     KeyHandler keyH;
     Vector position;
+    public final Vector cameraPosition;
 
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
+
+        cameraPosition = new Vector(gp.SCREEN_WIDTH/2 - (gp.TILE_SIZE/2), gp.SCREEN_HEIGHT/2- (gp.TILE_SIZE/2));
+
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues() {
-        position = new Vector(1000,1000);
+        position = new Vector(25*gp.TILE_SIZE,25*gp.TILE_SIZE);
         speed = 5;
         direction = "down";
     }
@@ -112,6 +116,15 @@ public class Player extends Entity{
                 }
                 break;
         }
-        g2.drawImage(image, position.getX(), position.getY(), gp.TILE_SIZE, gp.TILE_SIZE, null);
+        g2.drawImage(image, cameraPosition.getX(), cameraPosition.getY(), gp.TILE_SIZE, gp.TILE_SIZE, null);
     }
+
+    public Vector getPosition() {
+        return position;
+    }
+
+    public Vector getCameraPosition() {
+        return cameraPosition;
+    }
+
 }

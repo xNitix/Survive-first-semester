@@ -13,6 +13,7 @@ public class Player extends Entity{
 
     GamePanel gp;
     KeyHandler keyH;
+    Vector position;
 
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
@@ -22,9 +23,8 @@ public class Player extends Entity{
     }
 
     public void setDefaultValues() {
-        x = 100;
-        y = 100;
-        speed = 4;
+        position = new Vector(1000,1000);
+        speed = 5;
         direction = "down";
     }
 
@@ -45,22 +45,25 @@ public class Player extends Entity{
 
     public void update(){
         if(keyH.upPressed || keyH.downPressed || keyH.rightPreseed || keyH.leftPressed){
+            int xDisplacement = 0;
+            int yDisplacement = 0;
             if(keyH.upPressed){
                 direction = "up";
-                y -= speed;
+                yDisplacement -= speed;
             }
             if(keyH.downPressed){
                 direction = "down";
-                y += speed;
+                yDisplacement += speed;
             }
             if(keyH.rightPreseed){
                 direction = "right";
-                x += speed;
+                xDisplacement += speed;
             }
             if(keyH.leftPressed){
                 direction = "left";
-                x -= speed;
+                xDisplacement -= speed;
             }
+            position.vectorAdd(xDisplacement, yDisplacement, speed);
             spriteCounter++;
             if(spriteCounter > 13){
                 if(spriteNum == 1){
@@ -109,6 +112,6 @@ public class Player extends Entity{
                 }
                 break;
         }
-        g2.drawImage(image, x, y, gp.TILE_SIZE, gp.TILE_SIZE, null);
+        g2.drawImage(image, position.getX(), position.getY(), gp.TILE_SIZE, gp.TILE_SIZE, null);
     }
 }

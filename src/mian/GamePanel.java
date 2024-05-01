@@ -1,6 +1,7 @@
 package mian;
 
 import entity.Player;
+import tile.TileManager;
 
 import javax.swing.JPanel;
 import java.awt.*;
@@ -10,8 +11,8 @@ public class GamePanel extends JPanel implements Runnable {
     final int START_TILE_SIZE = 16;
     final int SCALE = 3;
     public final int TILE_SIZE = START_TILE_SIZE*SCALE;
-    final int MAX_SCREEN_COLUM = 16;
-    final int MAX_SCREEN_ROW = 12;
+    public final int MAX_SCREEN_COLUM = 16;
+    public final int MAX_SCREEN_ROW = 12;
     final int SCREEN_WIDTH = MAX_SCREEN_COLUM * TILE_SIZE;
     final int SCREEN_HEIGHT = MAX_SCREEN_ROW * TILE_SIZE;
 
@@ -19,8 +20,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     Thread gameThread;
     KeyHandler keyH = new KeyHandler();
-
     Player player = new Player(this, keyH);
+    TileManager tileM = new TileManager(this);
 
     int playerX = 100;
     int playerY = 100;
@@ -46,6 +47,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
+        tileM.draw(g2);
         player.draw(g2);
         g2.dispose();
     }

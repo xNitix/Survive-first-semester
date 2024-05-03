@@ -13,7 +13,6 @@ public class Player extends Entity{
 
     GamePanel gp;
     KeyHandler keyH;
-    Vector position;
     public final Vector cameraPosition;
 
     public Player(GamePanel gp, KeyHandler keyH){
@@ -22,12 +21,14 @@ public class Player extends Entity{
 
         cameraPosition = new Vector(gp.SCREEN_WIDTH/2 - (gp.TILE_SIZE/2), gp.SCREEN_HEIGHT/2- (gp.TILE_SIZE/2));
 
+        trueHitBox = new Rectangle(8,16,32,32);
+
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues() {
-        position = new Vector(25*gp.TILE_SIZE,25*gp.TILE_SIZE);
+        position = new Vector(24*gp.TILE_SIZE,24*gp.TILE_SIZE);
         speed = 5;
         direction = "down";
     }
@@ -51,25 +52,59 @@ public class Player extends Entity{
         if(keyH.upPressed || keyH.downPressed || keyH.rightPreseed || keyH.leftPressed){
             int xDisplacement = 0;
             int yDisplacement = 0;
-            if(keyH.upPressed){
-                direction = "up";
-                yDisplacement -= speed;
-            }
-            if(keyH.downPressed){
-                direction = "down";
-                yDisplacement += speed;
-            }
-            if(keyH.rightPreseed){
+
+            if (keyH.upPressed) {
+                if (keyH.rightPreseed) {
+                    direction = "upR";
+                } else if (keyH.leftPressed) {
+                    direction = "upL";
+                } else {
+                    direction = "up";
+                }
+            } else if (keyH.downPressed) {
+                if (keyH.rightPreseed) {
+                    direction = "downR";
+                } else if (keyH.leftPressed) {
+                    direction = "downL";
+                } else {
+                    direction = "down";
+                }
+            } else if (keyH.rightPreseed) {
                 direction = "right";
-                xDisplacement += speed;
-            }
-            if(keyH.leftPressed){
+            } else {
                 direction = "left";
-                xDisplacement -= speed;
             }
-            position.vectorAdd(xDisplacement, yDisplacement, speed);
+
+            collisionUD = false;
+            collisionLR = false;
+            gp.cChecker.checkTile(this);
+
+            if(!collisionUD){
+                switch (direction){
+                    case "upL", "up", "upR" -> {
+                        yDisplacement -= speed;
+                    }case "down", "downR", "downL" -> {
+                        yDisplacement += speed;
+                    }case "right" -> {
+                    }case "left" ->{}
+                }
+            }
+
+            if(!collisionLR){
+                switch (direction){
+                    case "upR", "downR", "right" -> {
+                        xDisplacement += speed;
+                    }case "upL", "downL", "left" -> {
+                        xDisplacement -= speed;
+                    }case "up" -> {
+                    }case "down" -> {
+                    }
+                }
+            }
+            if(!collisionUD || !collisionLR) position.vectorAdd(xDisplacement, yDisplacement, speed);
+
             spriteCounter++;
-            if(spriteCounter > 13){
+            if(spriteCounter > 10){
                 if(spriteNum == 1){
                     spriteNum = 2;
                 } else if(spriteNum == 2){
@@ -99,7 +134,7 @@ public class Player extends Entity{
                     image = down2;
                 }
                 break;
-            case "right":
+            case "right", "upR", "downR":
                 if(spriteNum == 1){
                     image = right1;
                 }
@@ -107,7 +142,7 @@ public class Player extends Entity{
                     image = right2;
                 }
                 break;
-            case "left":
+            case "left", "upL", "downL":
                 if(spriteNum == 1){
                     image = left1;
                 }

@@ -2,6 +2,7 @@ package entity;
 
 import mian.GamePanel;
 import mian.KeyHandler;
+import object.AObject;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -15,6 +16,8 @@ public class Player extends Entity{
     KeyHandler keyH;
     public final Vector cameraPosition;
 
+    public int keyNumber = 0;
+
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
@@ -22,6 +25,9 @@ public class Player extends Entity{
         cameraPosition = new Vector(gp.SCREEN_WIDTH/2 - (gp.TILE_SIZE/2), gp.SCREEN_HEIGHT/2- (gp.TILE_SIZE/2));
 
         trueHitBox = new Rectangle(8,16,32,32);
+
+        solidAreaDefaultX = 8;
+        solidAreaDefaultY = 16;
 
         setDefaultValues();
         getPlayerImage();
@@ -77,7 +83,13 @@ public class Player extends Entity{
 
             collisionUD = false;
             collisionLR = false;
+
+            // check tile collision
             gp.cChecker.checkTile(this);
+
+            // check object collision
+            int objIndex = gp.cChecker.checkObject(this,true);
+            pickUpObject(objIndex);
 
             if(!collisionUD){
                 switch (direction){
@@ -112,6 +124,31 @@ public class Player extends Entity{
                 }
                 spriteCounter = 0;
             }
+        }
+    }
+
+    private void pickUpObject(int index) {
+        if(index != 999) {
+            AObject[] objects = gp.getObjects();
+            String objectName = objects[index].getName();
+
+            switch (objectName) {
+                case "Key" -> {
+                    keyNumber++;
+                    objects[index] = null;
+                    System.out.println(STR."Keys: \{keyNumber}");
+                }
+
+                case "Door" -> {
+                    if(keyNumber > 0) {
+                        objects[index] = null;
+                        keyNumber--;
+                    }
+                    System.out.println(STR."Keys: \{keyNumber}");
+                }
+
+            }
+
         }
     }
 

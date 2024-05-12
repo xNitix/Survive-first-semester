@@ -1,6 +1,7 @@
 package mian;
 
 import entity.Entity;
+import object.AObject;
 
 public class CollisonChecker {
 
@@ -123,4 +124,127 @@ public class CollisonChecker {
             }
         }
     }
+
+    public int checkObject(Entity entity, boolean player){
+        int index = 999;
+
+        for(int i = 0; i < gp.getObjects().length; i++) {
+            AObject[] objects = gp.getObjects();
+            if(objects[i] != null){
+                // get entity's solid area position
+                entity.trueHitBox.x = entity.position.getX() + entity.trueHitBox.x;
+                entity.trueHitBox.y = entity.position.getY() + entity.trueHitBox.y;
+
+                // get the object's solid area position
+                objects[i].getSolidArea().x = objects[i].getPosition().getX() + objects[i].getSolidArea().x;
+                objects[i].getSolidArea().y = objects[i].getPosition().getY() + objects[i].getSolidArea().y;
+
+                switch (entity.direction){
+                    case "up" -> {
+                        entity.trueHitBox.y -= entity.speed;
+                        if (entity.trueHitBox.intersects(objects[i].getSolidArea())) {
+                            if(objects[i].isCollision()){
+                                entity.collisionUD = true;
+                            }
+                            if(player) {
+                                index = i;
+                            }
+                        }
+                    }
+                    case "upL" -> {
+                        entity.trueHitBox.y -= entity.speed;
+                        entity.trueHitBox.x -= entity.speed;
+                        if (entity.trueHitBox.intersects(objects[i].getSolidArea())) {
+                            if(objects[i].isCollision()){
+                                entity.collisionUD = true;
+                                entity.collisionLR = true;
+                            }
+                            if(player) {
+                                index = i;
+                            }
+                        }
+                    }
+                    case "upR" -> {
+                        entity.trueHitBox.y -= entity.speed;
+                        entity.trueHitBox.x += entity.speed;
+                        if (entity.trueHitBox.intersects(objects[i].getSolidArea())) {
+                            if(objects[i].isCollision()){
+                                entity.collisionUD = true;
+                                entity.collisionLR = true;
+                            }
+                            if(player) {
+                                index = i;
+                            }
+                        }
+                    }
+
+                    case "down" -> {
+                        entity.trueHitBox.y += entity.speed;
+                        if (entity.trueHitBox.intersects(objects[i].getSolidArea())) {
+                            if(objects[i].isCollision()){
+                                entity.collisionUD = true;
+                            }
+                            if(player) {
+                                index = i;
+                            }
+                        }
+                    }
+                    case "downL" -> {
+                        entity.trueHitBox.y += entity.speed;
+                        entity.trueHitBox.x -= entity.speed;
+                        if (entity.trueHitBox.intersects(objects[i].getSolidArea())) {
+                            if(objects[i].isCollision()){
+                                entity.collisionUD = true;
+                                entity.collisionLR = true;
+                            }
+                            if(player) {
+                                index = i;
+                            }
+                        }
+                    }
+                    case "downR" -> {
+                        entity.trueHitBox.y += entity.speed;
+                        entity.trueHitBox.x += entity.speed;
+                        if (entity.trueHitBox.intersects(objects[i].getSolidArea())) {
+                            if(objects[i].isCollision()){
+                                entity.collisionUD = true;
+                                entity.collisionLR = true;
+                            }
+                            if(player) {
+                                index = i;
+                            }
+                        }
+                    }
+                    case "left" -> {
+                        entity.trueHitBox.y -= entity.speed;
+                        if (entity.trueHitBox.intersects(objects[i].getSolidArea())) {
+                            if(objects[i].isCollision()){
+                                entity.collisionLR = true;
+                            }
+                            if(player) {
+                                index = i;
+                            }
+                        }
+                    }
+                    case "right" -> {
+                        entity.trueHitBox.y += entity.speed;
+                        if (entity.trueHitBox.intersects(objects[i].getSolidArea())) {
+                            if(objects[i].isCollision()){
+                                entity.collisionLR = true;
+                            }
+                            if(player) {
+                                index = i;
+                            }
+                        }
+                    }
+                }
+                entity.trueHitBox.x = entity.getSolidAreaDefaultX();
+                entity.trueHitBox.y = entity.getSolidAreaDefaultY();
+                objects[i].getSolidArea().x = objects[i].getSolidAreaDefaultX();
+                objects[i].getSolidArea().y = objects[i].getSolidAreaDefaultY();
+            }
+        }
+        return index;
+    }
+
 }

@@ -14,4 +14,13 @@ public class Entity {
     public Rectangle trueHitBox;
     public boolean collisionUD = false;
     public boolean collisionLR = false;
+    protected int solidAreaDefaultX, solidAreaDefaultY;
+
+    public int getSolidAreaDefaultX() {
+        return solidAreaDefaultX;
+    }
+
+    public int getSolidAreaDefaultY() {
+        return solidAreaDefaultY;
+    }
 }

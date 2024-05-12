@@ -1,6 +1,7 @@
 package mian;
 
 import entity.Player;
+import object.AObject;
 import tile.TileManager;
 
 import javax.swing.JPanel;
@@ -21,6 +22,10 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     KeyHandler keyH = new KeyHandler();
     public Player player = new Player(this, keyH);
+    private AObject[] objects = new AObject[10];
+
+    private AssetSetter assetSetter = new AssetSetter(this);
+
     TileManager tileM = new TileManager(this);
     public CollisonChecker cChecker = new CollisonChecker(this);
 
@@ -30,6 +35,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
         this.addKeyListener(keyH);
         this.setFocusable(true); // GamePanel can be "focused" to receive key input
+    }
+
+    public void setupGame(){
+        assetSetter.setObject();
     }
 
     public void startGameThread(){
@@ -45,6 +54,13 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
         tileM.draw(g2);
+
+        for (AObject object : objects) {
+            if (object != null) {
+                object.draw(g2, this);
+            }
+        }
+
         player.draw(g2);
         g2.dispose();
     }
@@ -68,5 +84,13 @@ public class GamePanel extends JPanel implements Runnable {
                 delta=0;
             }
         }
+    }
+
+    public AObject[] getObjects() {
+        return objects;
+    }
+
+    public Object getObjectAt(int index) {
+        return objects[index];
     }
 }

@@ -23,4 +23,12 @@ public class Entity {
     public int getSolidAreaDefaultY() {
         return solidAreaDefaultY;
     }
+
+    public void increaseEntitySpeed(int value) {
+        this.speed += value;
+    }
+
+    public void decreaseEntitySpeed(int value) {
+        this.speed -= value;
+    }
 }

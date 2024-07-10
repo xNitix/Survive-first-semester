@@ -1,5 +1,6 @@
 package object;
 
+import entity.Entity;
 import entity.Vector;
 import mian.GamePanel;
 
@@ -11,10 +12,15 @@ public abstract class AObject {
     protected String name;
     protected boolean collison = false;
     protected Vector position;
+    protected GamePanel gamePanel;
 
     protected Rectangle solidArea = new Rectangle(0,0,48,48);
     protected int solidAreaDefaultX = 0;
     protected int solidAreaDefaultY = 0;
+
+    public AObject (GamePanel gp) {
+        this.gamePanel = gp;
+    }
 
     public void draw(Graphics2D g2, GamePanel gp) {
         int screenX = position.getX() - gp.player.getPosition().getX() + gp.player.getCameraPosition().getX();
@@ -28,6 +34,8 @@ public abstract class AObject {
         }
 
     }
+
+    public abstract boolean interaction(Entity entity);
 
     public BufferedImage getImage() {
         return image;

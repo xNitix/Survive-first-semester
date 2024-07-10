@@ -29,6 +29,8 @@ public class GamePanel extends JPanel implements Runnable {
     TileManager tileM = new TileManager(this);
     public CollisonChecker cChecker = new CollisonChecker(this);
 
+    Sound sound = new Sound();
+
     public GamePanel(){
         this.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
         this.setBackground(Color.black);
@@ -39,6 +41,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame(){
         assetSetter.setObject();
+        playMusic(0);
     }
 
     public void startGameThread(){
@@ -92,5 +95,20 @@ public class GamePanel extends JPanel implements Runnable {
 
     public Object getObjectAt(int index) {
         return objects[index];
+    }
+
+    public void playMusic(int index) {
+        this.sound.setFile(index);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopMusic() {
+        this.sound.stop();
+    }
+
+    public void playSE(int index) {
+        sound.setFile(index);
+        sound.play();
     }
 }

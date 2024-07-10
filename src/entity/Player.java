@@ -16,7 +16,7 @@ public class Player extends Entity{
     KeyHandler keyH;
     public final Vector cameraPosition;
 
-    public int keyNumber = 0;
+    private int keyNumber = 0;
 
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
@@ -55,12 +55,12 @@ public class Player extends Entity{
     }
 
     public void update(){
-        if(keyH.upPressed || keyH.downPressed || keyH.rightPreseed || keyH.leftPressed){
+        if(keyH.upPressed || keyH.downPressed || keyH.rightPressed || keyH.leftPressed){
             int xDisplacement = 0;
             int yDisplacement = 0;
 
             if (keyH.upPressed) {
-                if (keyH.rightPreseed) {
+                if (keyH.rightPressed) {
                     direction = "upR";
                 } else if (keyH.leftPressed) {
                     direction = "upL";
@@ -68,14 +68,14 @@ public class Player extends Entity{
                     direction = "up";
                 }
             } else if (keyH.downPressed) {
-                if (keyH.rightPreseed) {
+                if (keyH.rightPressed) {
                     direction = "downR";
                 } else if (keyH.leftPressed) {
                     direction = "downL";
                 } else {
                     direction = "down";
                 }
-            } else if (keyH.rightPreseed) {
+            } else if (keyH.rightPressed) {
                 direction = "right";
             } else {
                 direction = "left";
@@ -130,25 +130,10 @@ public class Player extends Entity{
     private void pickUpObject(int index) {
         if(index != 999) {
             AObject[] objects = gp.getObjects();
-            String objectName = objects[index].getName();
-
-            switch (objectName) {
-                case "Key" -> {
-                    keyNumber++;
-                    objects[index] = null;
-                    System.out.println(STR."Keys: \{keyNumber}");
-                }
-
-                case "Door" -> {
-                    if(keyNumber > 0) {
-                        objects[index] = null;
-                        keyNumber--;
-                    }
-                    System.out.println(STR."Keys: \{keyNumber}");
-                }
-
+            AObject object = objects[index];
+            if(object.interaction(this)) {
+                objects[index] = null;
             }
-
         }
     }
 
@@ -199,4 +184,15 @@ public class Player extends Entity{
         return cameraPosition;
     }
 
+    public void increaseKeyNumber() {
+        this.keyNumber ++;
+    }
+
+    public void decreaseKeyNumber() {
+        this.keyNumber --;
+    }
+
+    public int getKeyNumber() {
+        return keyNumber;
+    }
 }

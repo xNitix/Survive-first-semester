@@ -27,9 +27,11 @@ public class OBJ_Door extends AObject{
     public boolean interaction(Entity entity) {
         if(entity instanceof Player player) {
             if(player.getKeyNumber() > 0) {
-                gamePanel.playSE(1);
+                gp.playSE(1);
                 player.decreaseKeyNumber();
                 return true;
+            } else {
+                gp.getUi().showMessage("You need a key!");
             }
             System.out.println(STR."Keys: \{player.getKeyNumber()}");
         }

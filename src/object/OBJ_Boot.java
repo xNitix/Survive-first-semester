@@ -6,6 +6,7 @@ import entity.Vector;
 import mian.GamePanel;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -25,7 +26,9 @@ public class OBJ_Boot extends AObject {
     @Override
     public boolean interaction(Entity entity) {
         entity.increaseEntitySpeed(3);
-        gamePanel.playSE(1);
+        gp.playSE(1);
+        gp.getUi().showMessage("You found Boots!");
         return true;
     }
+
 }

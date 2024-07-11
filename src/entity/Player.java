@@ -1,5 +1,6 @@
 package entity;
 
+import interfaces.drawable;
 import mian.GamePanel;
 import mian.KeyHandler;
 import object.AObject;
@@ -10,7 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Player extends Entity{
+public class Player extends Entity implements drawable {
 
     GamePanel gp;
     KeyHandler keyH;
@@ -137,6 +138,7 @@ public class Player extends Entity{
         }
     }
 
+    @Override
     public void draw(Graphics2D g2){
         BufferedImage image = null;
         switch (direction) {

@@ -3,6 +3,7 @@ package mian;
 import entity.Player;
 import object.AObject;
 import tile.TileManager;
+import ui.Ui;
 
 import javax.swing.JPanel;
 import java.awt.*;
@@ -28,8 +29,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     TileManager tileM = new TileManager(this);
     public CollisonChecker cChecker = new CollisonChecker(this);
+    private Sound music = new Sound();
+    private Sound se = new Sound();
 
-    Sound sound = new Sound();
+    private Ui ui = new Ui(this);
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
@@ -60,11 +63,12 @@ public class GamePanel extends JPanel implements Runnable {
 
         for (AObject object : objects) {
             if (object != null) {
-                object.draw(g2, this);
+                object.draw(g2);
             }
         }
 
         player.draw(g2);
+        ui.draw(g2);
         g2.dispose();
     }
 
@@ -98,17 +102,21 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void playMusic(int index) {
-        this.sound.setFile(index);
-        sound.play();
-        sound.loop();
+        this.music.setFile(index);
+        music.play();
+        music.loop();
     }
 
     public void stopMusic() {
-        this.sound.stop();
+        this.music.stop();
     }
 
     public void playSE(int index) {
-        sound.setFile(index);
-        sound.play();
+        se.setFile(index);
+        se.play();
+    }
+
+    public Ui getUi() {
+        return ui;
     }
 }

@@ -23,7 +23,7 @@ public class OBJ_Chest extends AObject{
 
     @Override
     public boolean interaction(Entity entity) {
-        gamePanel.playSE(1);
+        gp.playSE(1);
         return true;
     }
 }

@@ -2,31 +2,37 @@ package object;
 
 import entity.Entity;
 import entity.Vector;
+import interfaces.drawable;
 import mian.GamePanel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class AObject {
+public abstract class AObject implements drawable {
     protected BufferedImage image;
     protected String name;
     protected boolean collison = false;
     protected Vector position;
-    protected GamePanel gamePanel;
+    protected GamePanel gp;
 
-    protected Rectangle solidArea = new Rectangle(0,0,48,48);
+    protected Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     protected int solidAreaDefaultX = 0;
     protected int solidAreaDefaultY = 0;
 
-    public AObject (GamePanel gp) {
-        this.gamePanel = gp;
+    public AObject() {
+
     }
 
-    public void draw(Graphics2D g2, GamePanel gp) {
+    public AObject(GamePanel gp) {
+        this.gp = gp;
+    }
+
+    @Override
+    public void draw(Graphics2D g2) {
         int screenX = position.getX() - gp.player.getPosition().getX() + gp.player.getCameraPosition().getX();
         int screenY = position.getY() - gp.player.getPosition().getY() + gp.player.getCameraPosition().getY();
 
-        if(position.getX() + gp.TILE_SIZE > gp.player.getPosition().getX() - gp.player.getCameraPosition().getX() &&
+        if (position.getX() + gp.TILE_SIZE > gp.player.getPosition().getX() - gp.player.getCameraPosition().getX() &&
                 (position.getX() - gp.TILE_SIZE < gp.player.getPosition().getX() + gp.player.getCameraPosition().getX()) &&
                 (position.getY() + gp.TILE_SIZE > gp.player.getPosition().getY() - gp.player.getCameraPosition().getY()) &&
                 (position.getY() - gp.TILE_SIZE < gp.player.getPosition().getY() + gp.player.getCameraPosition().getY())) {
